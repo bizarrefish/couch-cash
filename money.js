@@ -90,7 +90,11 @@ function PieViewModel(conn, categoryListObs, statementList) {
 	
 	this.selectedStatement = ko.observable(null);
 	
+	this.showOthers = ko.observable(false);
+	
 	this.breakdown = ko.computed(function() {
+	
+		var showOthers = self.showOthers();
 		if(self.selectedStatement() == null) {
 			return $.when({});
 		}
@@ -104,7 +108,12 @@ function PieViewModel(conn, categoryListObs, statementList) {
 		
 		return conn.getDocument(self.selectedStatement()).then(function(doc) {
 			// Crunch data:
-			return categorize(doc.transactions, catMap);
+			var result = categorize(doc.transactions, catMap)
+			
+			if(!showOthers) {
+				delete result._others;
+			}
+			return result;
 		});
 		
 	}).extend({async: {}});

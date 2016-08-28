@@ -17,7 +17,8 @@
 <!-- These views are only visible after connection -->
 <section data-bind="visible: (viewContainer() != null)">
 	<section id="pieView" data-bind="with: (viewContainer() == null ? null : viewContainer().pieView)">
-		<select data-bind="options: statementList, value: selectedStatement, valueUpdate: 'afterkeydown'"></select><br>
+		<select data-bind="options: statementList, value: selectedStatement, valueUpdate: 'afterkeydown'"></select>
+		<input type="checkbox" data-bind="checked: showOthers">Show Others<br>
 		<div>
 			<div id="pieDiv"></div>
 			<div id="transactionTable">
