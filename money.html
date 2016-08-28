@@ -46,8 +46,8 @@
 		<header>Categories</header>
 		<section id="categoryList" data-bind="foreach: categoryList">
 			<div class="categoryContainer">
-				<div class="categoryLabel" data-bind="text: name,click: function(data) { $parent.expandedIndex($index()); }"></div>
-				<input type="checkbox" data-bind="checked: enabled">Enable<br>
+				<input type="checkbox" data-bind="checked: enabled">
+				<span class="categoryLabel" data-bind="text: name,click: function(data) { if($parent.expandedIndex() != $index()) $parent.expandedIndex($index()); else $parent.expandedIndex(null); }"></span><br>
 				<div class="categoryItemExpand" data-bind="visible: ($index() == $parent.expandedIndex())">
 					<input type="button" value="Delete Category" data-bind="click: $parent.deleteExpandedCategory">
 					<textarea data-bind="value: test, valueUpdate: 'afterkeydown'"></textarea><br>

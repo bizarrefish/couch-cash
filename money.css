@@ -54,6 +54,8 @@ body > header {
 
 
 .categoryContainer {
+	display:inline-block;
+	vertical-align:top;
 	overflow:auto;
 	margin-top:5px;
 	padding:5px;

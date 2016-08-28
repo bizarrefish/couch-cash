@@ -185,10 +185,33 @@ function LoadStatementViewModel(conn, reloadStatements){
 			txMap[key].push(tx);
 		});
 		
+		function makeTxKey(a) {
+			return a.time + "," + a.ref + "," + a.balance + "," + a.credit + "," + a.debit;
+		}
 		
 		var reqs = $.map(txMap, function(txList, key) {
-			return conn.putNewDocument("Statement-" + key, { transactions: txList });
-		});
+			var docId = "Statement-" + key
+			
+			return conn.getDocument(docId).then(function(oldDoc) {
+				// Must merge with an old document
+				
+				var mergedTxMap = {};
+				// Add the old transactions
+				$.each(oldDoc.transactions,function(i,tx) { mergedTxMap[makeTxKey(tx)] = tx; })
+				
+				// Add the new transactions
+				$.each(txList,function(i,tx) { mergedTxMap[makeTxKey(tx)] = tx; })
+				
+				// Rebuild the array
+				txList = [];
+				$.each(mergedTxMap,function(i,tx) { txList.push(tx); })
+				
+				return conn.putNewDocument(docId, { _rev: oldDoc._rev, transactions: txList });
+			}, function() {
+				// no old document; just store
+				return conn.putNewDocument(docId, { transactions: txList });
+			});
+		})
 		
 		$.when.apply($, reqs).done(function() {
 			reloadStatements();
