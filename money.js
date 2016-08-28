@@ -13,7 +13,7 @@ google.charts.setOnLoadCallback(function() {
 function LoginViewModel() {
 	var self = this;
 	this.username = ko.observable("admin")
-	this.password = ko.observable("admin")
+	this.password = ko.observable("")
 	this.database = ko.observable("money")
 	
 	this.databaseConnection = ko.observable(null);

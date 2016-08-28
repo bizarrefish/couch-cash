@@ -2,7 +2,7 @@
 function DatabaseConnection(username, password, database) {
 	this.doRequest = function(method, id, data) {
 		return $.ajax({
-			url: "http://localhost:5984/" + database + "/" + id,
+			url: "http://" + location.host + ":5984/" + database + "/" + id,
 			type: method,
 			dataType: "json",
 			contentType: "json",
@@ -20,6 +20,11 @@ DatabaseConnection.prototype.getCategories = function() {
 	return this.getDocument("Categories").then(function(doc) {
 		self.categoriesRev = doc._rev;
 		return doc.categories;
+	},function() {
+		return self.putNewDocument("Categories", { _id: "Categories", categories: [] }).then(function(doc) {
+			self.categoriesRev = doc._rev;
+			return [];
+		});
 	});
 }
 
@@ -31,7 +36,7 @@ DatabaseConnection.JUST = function(value) {
 
 DatabaseConnection.prototype.setCategories = function(cats) {
 	var self = this;
-	return (self.categoriesRev == null ? getCategories() : DatabaseConnection.JUST(null)).then(function() {
+	return (self.categoriesRev == null ? self.getCategories() : DatabaseConnection.JUST(null)).then(function() {
 		return self.doRequest("PUT", "Categories", {
 			"_id": "Categories",
 			"_rev": self.categoriesRev,
