@@ -29,7 +29,7 @@
 				<tbody>
 				<!-- ko foreach: transactionList -->
 				<tr>
-					<td data-bind="text: (new Date(time).toISOString())"></td>
+					<td data-bind="text: (new Date(time).toLocaleDateString())"></td>
 					<td data-bind="text: ref"></td>
 					<td data-bind="text: ($data.debit == undefined ? 0 : $data.debit)"></td>
 					<td data-bind="text: balance"></td>
