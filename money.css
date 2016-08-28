@@ -1,0 +1,80 @@
+body {
+	font-family: arial;
+}
+
+body > header {
+	display: block;
+	padding:10px;
+	border: 1px solid lightgray;
+	box-shadow: 10px 10px 5px #888888;
+	margin:10px;
+}
+
+#pieView {
+	display: block;
+	padding:10px;
+	border: 1px solid lightgray;
+	box-shadow: 10px 10px 5px #888888;
+	margin:10px;
+}
+
+#pieDiv {
+	width: 600px;
+	display:inline-block;
+	vertical-align: top;
+}
+
+#transactionTable {
+	width: 600px;
+	display:inline-block;
+	vertical-align: top;
+	overflow-y: scroll;
+	height:300px;
+}
+
+#transactionTable td {
+	outline:1px solid black;
+}
+#transactionTable th {
+	outline:1px solid black;
+}
+
+#categoryView {
+	display: block;
+	padding:10px;
+	border: 1px solid lightgray;
+	box-shadow: 10px 10px 5px #888888;
+	margin:10px;
+}
+
+#categoryView > header {
+	font-weight:bold;
+	display:block;
+}
+
+
+.categoryContainer {
+	overflow:auto;
+	margin-top:5px;
+	padding:5px;
+	background-color: #CCC;
+	border: 1px solid black;
+
+}
+
+
+.categoryLabel {
+	cursor:pointer;
+}
+
+.categoryItemExpand > textarea {
+	width:100%;
+}
+
+#loadView {
+	display: block;
+	padding:10px;
+	border: 1px solid lightgray;
+	box-shadow: 10px 10px 5px #888888;
+	margin:10px;
+}

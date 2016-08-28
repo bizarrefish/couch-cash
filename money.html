@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Money</title>
+<link rel="stylesheet" href="money.css"/>
+</head>
+<body>
+
+<header data-bind="with: login, visible: !connected()">
+<table>
+<tr><td colspan="2"><strong>Log In</strong></td></tr>
+<tr><td>Username</td><td><input type="text" data-bind="value: username"></td></tr>
+<tr><td>Password</td><td><input type="password" data-bind="value: password"></td></tr>
+<tr><td colspan="2" style="text-align:right"><input type="submit" value="Log in" data-bind="click: doLogin"></td></tr>
+</table>
+</header>
+
+<!-- These views are only visible after connection -->
+<section data-bind="visible: (viewContainer() != null)">
+	<section id="pieView" data-bind="with: (viewContainer() == null ? null : viewContainer().pieView)">
+		<select data-bind="options: statementList, value: selectedStatement, valueUpdate: 'afterkeydown'"></select><br>
+		<div>
+			<div id="pieDiv"></div>
+			<div id="transactionTable">
+			<h3>Category: <span data-bind="text: selectedCategory"</span></h3>
+			<table style="width:100%;">
+				<thead>
+					<tr><th>Time</th><th>Ref</th><th>Amount</th><th>Balance</th>
+				</thead>
+				<tbody>
+				<!-- ko foreach: transactionList -->
+				<tr>
+					<td data-bind="text: (new Date(time).toISOString())"></td>
+					<td data-bind="text: ref"></td>
+					<td data-bind="text: ($data.debit == undefined ? 0 : $data.debit)"></td>
+					<td data-bind="text: balance"></td>
+				</tr>
+				<!-- /ko -->
+				</tbody>
+			</table>
+			</div>
+		</div>
+		<br>
+	</section>
+
+	<section id="categoryView" data-bind="with: (viewContainer() == null ? null : viewContainer().categoryView)">
+		<header>Categories</header>
+		<section id="categoryList" data-bind="foreach: categoryList">
+			<div class="categoryContainer">
+				<div class="categoryLabel" data-bind="text: name,click: function(data) { $parent.expandedIndex($index()); }"></div>
+				<input type="checkbox" data-bind="checked: enabled">Enable<br>
+				<div class="categoryItemExpand" data-bind="visible: ($index() == $parent.expandedIndex())">
+					<input type="button" value="Delete Category" data-bind="click: $parent.deleteExpandedCategory">
+					<textarea data-bind="value: test, valueUpdate: 'afterkeydown'"></textarea><br>
+				</div>
+			</div>
+		</section>
+		<br>
+		New Category <input type="text" class="newCategoryItem" data-bind="value: newCategoryName, valueUpdate: 'afterkeydown'">
+		<input type="button" value="Create" data-bind="click: newCategory, enable: (newCategoryName().length > 0)"><br>
+		<input type="button" value="Save" data-bind="click: saveCategories, enable: edited">
+
+	</section>
+	
+	<section id="loadView" data-bind="with: (viewContainer() == null ? null : viewContainer().loadView)">
+		<header>Load Statement From CSV</header>
+		<textarea data-bind="value: statementText"></textarea><br>
+		RBS<input type="radio" name="loadMode" value="RBS" data-bind="checked: loadMode"><br>
+		HSBC<input type="radio" name="loadMode" value="HSBC" data-bind="checked: loadMode"><br>
+		<input type="button" value="Load" data-bind="click: loadStatement">
+	</section>
+
+</section>
+
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript" src="knockout-3.4.0.js"></script>
+<script type="text/javascript" src="knockout.mapping-latest.js"></script>
+<script type="text/javascript" src="jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="ko-async.js"></script>
+<script type="text/javascript" src="db.js"></script>
+<script type="text/javascript" src="matchers.js"></script>
+<script type="text/javascript" src="bank.js"></script>
+<script type="text/javascript" src="money.js"></script>
+</body>
+</html>
