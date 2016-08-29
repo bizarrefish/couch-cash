@@ -92,7 +92,7 @@ function PieViewModel(conn, categoryListObs, statementList) {
 	
 	this.showOthers = ko.observable(false);
 	
-	this.breakdown = ko.computed(function() {
+	this.breakdown = ko.pureComputed(function() {
 	
 		var showOthers = self.showOthers();
 		if(self.selectedStatement() == null) {
@@ -120,7 +120,7 @@ function PieViewModel(conn, categoryListObs, statementList) {
 	
 	this.selectedCategory = ko.observable("");
 	
-	this.transactionList = ko.computed(function() {
+	this.transactionList = ko.pureComputed(function() {
 		return self.breakdown()[self.selectedCategory()];
 	});
 	
@@ -236,14 +236,14 @@ function TopLevelViewModel() {
 	
 	this.connection = this.login.databaseConnection;
 	
-	this.connected = ko.computed(function() {
+	this.connected = ko.pureComputed(function() {
 		return self.connection() != null;
 	});
 	
 	this.statementList = ko.observable([]);
 	
 	// This is populated on connection
-	this.viewContainer = ko.computed(function() {
+	this.viewContainer = ko.pureComputed(function() {
 		var conn = self.connection();
 		
 		if(conn != null && self.viewContainer.peek() == null) {
