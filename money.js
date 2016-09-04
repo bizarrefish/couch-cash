@@ -188,7 +188,7 @@ function PieViewModel(conn, categoryListObs, statementList) {
 			});
 			fmt.format(data, 1);
 		
-			var options = {title:'Spending Pie', is3D: true, pieSliceText: "value", width: sel.width(), height:500};
+			var options = {title:'Breakdown', is3D: true, pieSliceText: "value", width: sel.width(), height:500};
 			chart.draw(data, options);
 			
 		});
