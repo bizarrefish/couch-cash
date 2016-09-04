@@ -90,7 +90,9 @@ function PieViewModel(conn, categoryListObs, statementList) {
 	
 	this.selectedStatement = ko.observable(null);
 	
-	this.showOthers = ko.observable(false);
+	this.spentGained = ko.observable("spent");
+	
+	this.showOthers = ko.observable(true);
 	
 	this.breakdown = ko.pureComputed(function() {
 	
@@ -120,10 +122,38 @@ function PieViewModel(conn, categoryListObs, statementList) {
 	
 	this.selectedCategory = ko.observable("");
 	
+		
+	this.summary = ko.pureComputed(function() {
+		var bd = self.breakdown();
+		var result = {};
+		$.each(bd, function(cat, list) {
+			var total = 0;
+			$.each(list, function(idx, tx) {
+				total += tx.credit - tx.debit;
+			});
+			result[cat] = total;
+		});
+		return result;
+	});
+	
+	
+	this.deltaHTML = ko.pureComputed(function() {
+		var total = 0;
+		$.each(self.summary(), function(i, subTotal) {
+			total += subTotal;
+		});
+		
+		if(total < 0) {
+			return '<span class="debitText">' + total.toFixed(2) + '</span>'
+		} else {
+			return '<span class="creditText">+' + total.toFixed(2) + '</span>'
+		}
+	});
+	
 	this.transactionList = ko.pureComputed(function() {
 		return self.breakdown()[self.selectedCategory()];
 	});
-	
+
 
 	var sel = $('#pieDiv');
 	var data = null;
@@ -141,22 +171,25 @@ function PieViewModel(conn, categoryListObs, statementList) {
 		});
 		
 		
-		self.breakdown.subscribe(function(bd) {
+		
+		ko.computed(function() {
+			var bd = self.breakdown();
+			var spentGained = self.spentGained();
 			data = new google.visualization.DataTable();
 			data.addColumn('string', "Category");
-			data.addColumn('number', "Total Spent")
-			$.each(bd, function(cat, list) {
-				var total = 0;
-				$.each(list, function(idx, tx) {
-					if(tx.debit) total += tx.debit;
-				});
-				data.addRow([cat, total]);
+			data.addColumn('number', "Total");
+			$.each(self.summary(), function(cat, total) {
+				if(spentGained == "spent") {
+					total = -total;
+				}
+				if(total > 0) {
+					data.addRow([cat, total])
+				}
 			});
 			fmt.format(data, 1);
 		
 			var options = {title:'Spending Pie', is3D: true, pieSliceText: "value", width: sel.width(), height:500};
 			chart.draw(data, options);
-
 			
 		});
 

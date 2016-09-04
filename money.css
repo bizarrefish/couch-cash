@@ -80,3 +80,13 @@ body > header {
 	box-shadow: 10px 10px 5px #888888;
 	margin:10px;
 }
+
+.debitText {
+	color: red;
+	font-weight:bold;
+}
+
+.creditText {
+	color: green;
+	font-weight:bold;
+}

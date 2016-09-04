@@ -22,23 +22,25 @@
 		<div>
 			<div id="pieDiv"></div>
 			<div id="transactionTable">
-			<h3>Category: <span data-bind="text: selectedCategory"</span></h3>
-			<table style="width:100%;">
-				<thead>
-					<tr><th>Time</th><th>Ref</th><th>Amount</th>
-				</thead>
-				<tbody>
-				<!-- ko foreach: transactionList -->
-				<tr>
-					<td data-bind="text: (new Date(time).toLocaleDateString())"></td>
-					<td data-bind="text: ref"></td>
-					<td data-bind="text: ($data.debit == undefined ? 0 : $data.debit)"></td>
-				</tr>
-				<!-- /ko -->
-				</tbody>
-			</table>
+				<h3>Category: <span data-bind="text: selectedCategory"</span></h3>
+				<table style="width:100%;">
+					<thead>
+						<tr><th>Time</th><th>Ref</th><th>Amount</th>
+					</thead>
+					<tbody>
+					<!-- ko foreach: transactionList -->
+					<tr>
+						<td data-bind="text: (new Date(time).toLocaleDateString())"></td>
+						<td data-bind="text: ref"></td>
+						<td data-bind="text: ($data.credit - $data.debit).toFixed(2)"></td>
+					</tr>
+					<!-- /ko -->
+					</tbody>
+				</table>
 			</div>
 		</div>
+		<input type="radio" name="spentGained" value="spent" data-bind="checked: spentGained">Spent	<input type="radio" name="spentGained" value="gained" data-bind="checked: spentGained">Gained<br><br>
+		<div>Delta <span data-bind="html: deltaHTML"></span></div>
 		<br>
 	</section>
 
