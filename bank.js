@@ -12,28 +12,45 @@ function loadRBS(text) {
 		if(index < 3)
 			return;
 		
-		if(line.indexOf('"') != -1) {
-			// No quotes in reference
+		var inQuotes = false;
+		var skip = false;
 		
-			var beforeRef = line.replace(/",.*$/,'');
-			var beforeParts = beforeRef.split(',');
-			var time = parseRBSDate(beforeParts[0]);
-			var ref = line.replace(/^.*,"'/,'').replace(/",.*$/,'');
-			var afterRef = line.replace(/.*",/,'');
-			var afterParts = afterRef.split(',');
-			var value = Number(afterParts[0]);
-			var balance = Number(afterParts[1]);
-
-		} else {
-			// Quotes in reference
+		var fields = [""];
+		for(var i in line) {
+			var c = line[i];
 			
-			var parts = line.split(",");
-			var time = parseRBSDate(parts[0]);
-			var ref = parts[2].substring(1);
-			var value = Number(parts[3]);
-			var balance = Number(parts[4]);
-		}
+			if(skip) {
+				skip = false;
+				continue;
+			}
+			
+			switch(c) {
+			case "\"":
+				inQuotes = !inQuotes;
+				if(inQuotes) {
+					skip = true;
+				}
+				break;
 				
+			case ",":
+				if(inQuotes) {
+					fields[fields.length-1] = fields[fields.length-1] + c;
+				} else {
+					fields.push("");
+				}
+				break;
+				
+			default:
+				fields[fields.length-1] = fields[fields.length-1] + c;
+				break;
+			}
+		}
+		
+		var time = parseRBSDate(fields[0]);
+		var ref = fields[2];
+		var balance = Number(fields[4]);
+		var value = Number(fields[3]);
+		
 		var obj = {};
 		obj.time = time;
 		obj.ref = ref;
